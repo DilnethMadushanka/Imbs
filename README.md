@@ -1,4 +1,4 @@
-# Horizon Campus – Student Management System
+# Trivex Campus – Student Management System
 
 CIT1074 – Web Application Development Project
 Built with **Node.js + Express**, **Firebase Cloud Firestore**, **HTML5 (EJS templates)**, **hand-written CSS3** and **vanilla JavaScript**. No CSS framework.
