@@ -35,12 +35,12 @@
             <% results.forEach(function (s) { %>
               <tr>
                 <td data-label="NIC" class="mono"><%= s.nic %></td>
-                <td data-label="Name"><%= s.name %></td>
+                <td data-label="Name"><span class="name-cell"><span class="avatar avatar-sm"><%= s.name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() %></span><%= s.name %></span></td>
                 <td data-label="Gender"><%= s.gender %></td>
                 <td data-label="Address"><%= s.address %></td>
                 <td data-label="Contact" class="mono"><%= s.contact %></td>
                 <td data-label="Email"><%= s.email %></td>
-                <td data-label="Course"><%= s.course_name %></td>
+                <td data-label="Course"><span class="chip"><%= s.course_name %></span></td>
                 <td data-label="Registered"><%= s.reg_date ? new Date(s.reg_date).toLocaleDateString('en-GB') : '' %></td>
                 <td class="row-actions">
                   <a href="/update?nic=<%= encodeURIComponent(s.nic) %>">Edit</a>

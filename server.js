@@ -38,6 +38,7 @@ app.use((req, res, next) => {
   res.locals.site = site;
   res.locals.admin = (req.session && req.session.admin) || null;
   res.locals.currentPath = req.path;
+  res.locals.icon = require('./utils/icons');   // SVG icons for the admin area
   next();
 });
 

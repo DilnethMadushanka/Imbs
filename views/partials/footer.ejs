@@ -2,6 +2,11 @@
   views/partials/footer.ejs
   Shared bottom part of every page: footer + JavaScript file.
 %>
+<% if (admin) { %>
+    <%# Admin pages: a small footer inside the content area %>
+    <footer class="admin-footer">&copy; <%= new Date().getFullYear() %> <%= site.CAMPUS_NAME %> &middot; Admin panel</footer>
+  </main>
+<% } else { %>
   </main>
 
   <!-- ===== Footer ===== -->
@@ -18,6 +23,7 @@
       <p class="footer-copy">&copy; <%= new Date().getFullYear() %> <%= site.CAMPUS_NAME %>. CIT1074 Web Application Development Project.</p>
     </div>
   </footer>
+<% } %>
 
   <!-- Client-side validation, menu toggle and delete confirmation -->
   <script src="/js/main.js"></script>

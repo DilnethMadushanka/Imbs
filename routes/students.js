@@ -47,8 +47,40 @@ function studentFromForm(body) {
 // =============================================================
 router.get('/dashboard', async (req, res, next) => {
   try {
-    const snap = await students.get();            // all students
-    res.render('dashboard', { title: 'Dashboard', total: snap.size });
+    const courseList = await getCourses();
+    const snap = await students.get();                       // all students
+    const list = snap.docs.map((d) => toStudent(d, courseList));
+
+    // ---- Numbers for the stat tiles ----
+    const now = new Date();
+    const thisMonth = list.filter((s) => s.reg_date &&
+      s.reg_date.getMonth() === now.getMonth() && s.reg_date.getFullYear() === now.getFullYear()).length;
+    const male = list.filter((s) => s.gender === 'Male').length;
+
+    // ---- Students per course (for the bar list) ----
+    const perCourse = courseList.map((c) => ({
+      name: c.course_name,
+      count: list.filter((s) => String(s.course_id) === String(c.course_id)).length
+    }));
+
+    // ---- 5 most recently registered students ----
+    const recent = list
+      .filter((s) => s.reg_date)
+      .sort((a, b) => b.reg_date - a.reg_date)
+      .slice(0, 5);
+
+    res.render('dashboard', {
+      title: 'Dashboard',
+      total: list.length,
+      courseCount: courseList.length,
+      thisMonth,
+      male,
+      female: list.length - male,
+      perCourse,
+      maxCount: Math.max(1, ...perCourse.map((c) => c.count)),
+      recent,
+      today: now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' })
+    });
   } catch (err) { next(err); }
 });
 
