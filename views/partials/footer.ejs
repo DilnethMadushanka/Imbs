@@ -9,16 +9,32 @@
 <% } else { %>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer: brand, links, programmes, contact ===== -->
   <footer class="footer">
-    <div class="wrap footer-inner">
-      <div>
-        <p class="footer-name"><%= site.CAMPUS_NAME %></p>
-        <p><%= site.CAMPUS_AREA %></p>
+    <div class="wrap footer-grid">
+      <div class="footer-about">
+        <a class="brand" href="/">
+          <img src="/images/logo.png" alt="" width="40" height="40">
+          <span><%= site.CAMPUS_NAME %></span>
+        </a>
+        <p>Diplomas, HNDs and certificates in computing, business, English and design.</p>
       </div>
       <div>
-        <p><a href="mailto:<%= site.CAMPUS_EMAIL %>"><%= site.CAMPUS_EMAIL %></a></p>
-        <p><%= site.CAMPUS_HOURS %></p>
+        <p class="footer-head">Explore</p>
+        <ul class="footer-links">
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#courses">Courses</a></li>
+          <li><a href="/#contact">Contact</a></li>
+          <li><a href="/admin">Admin login</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-head">Visit</p>
+        <ul class="footer-links">
+          <li><%= site.CAMPUS_AREA %></li>
+          <li><a href="mailto:<%= site.CAMPUS_EMAIL %>"><%= site.CAMPUS_EMAIL %></a></li>
+          <li><%= site.CAMPUS_HOURS %></li>
+        </ul>
       </div>
       <p class="footer-copy">&copy; <%= new Date().getFullYear() %> <%= site.CAMPUS_NAME %>. CIT1074 Web Application Development Project.</p>
     </div>

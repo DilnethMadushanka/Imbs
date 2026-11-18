@@ -32,8 +32,10 @@ function active($file, $current) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <!-- Marks that JavaScript is on, so scroll animations only hide content when they can show it again -->
+  <script>document.documentElement.classList.add('js');</script>
 </head>
-<body class="<?= $is_admin ? 'is-admin' : 'is-public' ?>">
+<body class="<?= $is_admin ? 'is-admin' : 'is-public' ?><?= !$is_admin && basename($_SERVER['SCRIPT_NAME']) === 'index.php' ? ' is-home' : '' ?>">
   <!-- Skip link: lets keyboard users jump straight to the content -->
   <a class="skip-link" href="#main">Skip to content</a>
 

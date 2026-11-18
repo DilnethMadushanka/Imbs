@@ -1,7 +1,7 @@
 <?php
 // =============================================================
 // includes/icons.php
-// Small line icons (SVG) used in the admin area.
+// Small line icons (SVG) used in the admin area and on the home page.
 // Usage in a page:  echo icon('search');
 // =============================================================
 function icon($name) {
@@ -18,6 +18,13 @@ function icon($name) {
         'gender' => '<circle cx="12" cy="8" r="4"/><path d="M6 21v-1a6 6 0 0 1 12 0v1"/>',
         'home' => '<path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
         'arrow' => '<path d="M5 12h14M12 5l7 7-7 7"/>',
+        'monitor' => '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+        'clock' => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        'award' => '<circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8"/>',
+        'map' => '<path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+        'mail' => '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
+        'check' => '<path d="M20 6 9 17l-5-5"/>',
+        'chat' => '<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/>',
     ];
     return '<svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
          . ($paths[$name] ?? '') . '</svg>';

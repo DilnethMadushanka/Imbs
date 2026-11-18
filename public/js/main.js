@@ -4,6 +4,7 @@
 //   1. Mobile menu open / close
 //   2. Client-side form validation (friendly messages)
 //   3. confirm("Are you sure?") before deleting
+//   4. Home page: solid navbar on scroll, fade-in on scroll, counting numbers
 // =============================================================
 
 // ---------- 1. Mobile menu ----------
@@ -97,3 +98,48 @@ document.querySelectorAll('form[data-confirm]').forEach(function (form) {
     }
   });
 });
+
+// ---------- 4. Home page effects ----------
+// a) The see-through navbar turns solid once the page is scrolled
+const navbar = document.querySelector('.is-home .navbar');
+if (navbar) {
+  const onScroll = function () { navbar.classList.toggle('scrolled', window.scrollY > 40); };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+// b) Sections fade up when they scroll into view, and numbers count up from 0
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function countUp(el) {
+  const target = parseInt(el.dataset.count, 10);
+  if (reduceMotion || !target) return;            // keep the real number as it is
+  const start = performance.now();
+  const step = function (now) {
+    const t = Math.min((now - start) / 1200, 1);   // 1.2 seconds
+    el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3)));  // ease-out
+    if (t < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+const revealItems = document.querySelectorAll('[data-reveal]');
+if ('IntersectionObserver' in window && revealItems.length) {
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in');
+      // remove the delay afterwards so hover effects react straight away
+      setTimeout(function () { entry.target.style.transitionDelay = ''; }, 1200);
+      entry.target.querySelectorAll('[data-count]').forEach(countUp);
+      observer.unobserve(entry.target);            // animate once only
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  revealItems.forEach(function (item) {
+    // cards in the same row appear one after another
+    item.style.transitionDelay = (item.parentElement.children.length > 1 ? (Array.prototype.indexOf.call(item.parentElement.children, item) % 4) * 90 : 0) + 'ms';
+    observer.observe(item);
+  });
+} else {
+  revealItems.forEach(function (item) { item.classList.add('in'); });
+}
