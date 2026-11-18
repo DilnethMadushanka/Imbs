@@ -1,0 +1,28 @@
+<%# views/setup.ejs  -  ONE-TIME DATABASE SETUP (see routes/setup.js) %>
+<%- include('partials/header') %>
+<section class="page">
+  <div class="wrap narrow">
+    <h1>Database setup</h1>
+
+    <% if (justRan) { %>
+      <div class="alert alert-success" role="status">
+        Done. The admin account, 5 courses and 5 sample students were added.
+      </div>
+      <p class="lead">Log in with username <strong>admin</strong> and password <strong>admin123</strong>.</p>
+      <a class="btn btn-gold" href="/login">Go to admin login</a>
+    <% } else if (done) { %>
+      <div class="alert alert-success" role="status">The database is already set up.</div>
+      <p class="lead">This page only works once, on an empty database.</p>
+      <a class="btn btn-gold" href="/login">Go to admin login</a>
+    <% } else { %>
+      <p class="lead">
+        The database is empty. This adds the admin account (admin / admin123),
+        the 5 courses and 5 sample students. It can only be done once.
+      </p>
+      <form method="POST" action="/setup">
+        <button type="submit" class="btn btn-gold">Set up the database</button>
+      </form>
+    <% } %>
+  </div>
+</section>
+<%- include('partials/footer') %>

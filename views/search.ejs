@@ -12,7 +12,7 @@
     <%# GET form: the search word goes in the URL, e.g. /search?q=kasun %>
     <form method="GET" action="/search" class="search-bar">
       <label for="q" class="sr-only">NIC or name</label>
-      <input type="search" id="q" name="q" value="<%= q %>" placeholder="Enter a NIC or part of a name (leave empty to show all)">
+      <input type="search" id="q" name="q" value="<%= q %>" placeholder="NIC or name (leave empty for all)">
       <button type="submit" class="btn btn-gold">Search</button>
     </form>
 
@@ -23,7 +23,8 @@
 
     <% if (results.length) { %>
       <div class="table-wrap">
-        <table class="table">
+        <%# On phones each row turns into a card (see "Tables" in style.css) %>
+        <table class="table table-cards">
           <thead>
             <tr>
               <th>NIC</th><th>Name</th><th>Gender</th><th>Address</th>
@@ -33,14 +34,14 @@
           <tbody>
             <% results.forEach(function (s) { %>
               <tr>
-                <td class="mono"><%= s.nic %></td>
-                <td><%= s.name %></td>
-                <td><%= s.gender %></td>
-                <td><%= s.address %></td>
-                <td class="mono"><%= s.contact %></td>
-                <td><%= s.email %></td>
-                <td><%= s.course_name %></td>
-                <td><%= s.reg_date ? new Date(s.reg_date).toLocaleDateString('en-GB') : '' %></td>
+                <td data-label="NIC" class="mono"><%= s.nic %></td>
+                <td data-label="Name"><%= s.name %></td>
+                <td data-label="Gender"><%= s.gender %></td>
+                <td data-label="Address"><%= s.address %></td>
+                <td data-label="Contact" class="mono"><%= s.contact %></td>
+                <td data-label="Email"><%= s.email %></td>
+                <td data-label="Course"><%= s.course_name %></td>
+                <td data-label="Registered"><%= s.reg_date ? new Date(s.reg_date).toLocaleDateString('en-GB') : '' %></td>
                 <td class="row-actions">
                   <a href="/update?nic=<%= encodeURIComponent(s.nic) %>">Edit</a>
                   <a href="/delete?nic=<%= encodeURIComponent(s.nic) %>" class="danger-link">Delete</a>

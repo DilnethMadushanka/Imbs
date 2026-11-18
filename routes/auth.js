@@ -4,7 +4,8 @@
 // =============================================================
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const { admins, courses } = require('../config/firebase');
+const { admins, courses, configError } = require('../config/firebase');
+const { needsSetup, COURSES } = require('../utils/seed-data');
 
 const router = express.Router();
 
@@ -13,10 +14,16 @@ router.get('/', async (req, res) => {
   let courseList = [];
   try {
     // Load the course names from Firestore to show on the home page
+    if (configError) throw new Error(configError);
     const snap = await courses.orderBy('course_id').get();
     courseList = snap.docs.map((d) => d.data());
   } catch (err) {
     console.error('Could not load courses:', err.message); // page still loads without them
+  }
+  // Database empty or not reachable? Show the standard course list so the
+  // home page never looks broken.
+  if (!courseList.length) {
+    courseList = COURSES.map((name, i) => ({ course_id: i + 1, course_name: name }));
   }
   res.render('index', { title: 'Home', courses: courseList });
 });
@@ -46,7 +53,11 @@ router.post('/login', async (req, res, next) => {
       req.session.admin = username;   // remember who logged in (saved in a signed cookie)
       res.redirect('/dashboard');
     } else {
-      res.render('login', { title: 'Admin Login', error: 'Invalid username or password.', username });
+      // No admin at all yet? Point to the setup page instead.
+      const error = (await needsSetup())
+        ? 'No admin account exists yet. Open /setup to set up the database first.'
+        : 'Invalid username or password.';
+      res.render('login', { title: 'Admin Login', error, username });
     }
   } catch (err) {
     next(err);

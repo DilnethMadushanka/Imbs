@@ -44,12 +44,13 @@ app.use((req, res, next) => {
 // ---- If Firebase is not set up, show the reason instead of crashing ----
 const { configError } = require('./config/firebase');
 app.use((req, res, next) => {
-  if (!configError) return next();
+  if (!configError || req.path === '/') return next();   // the home page still works
   res.status(500).render('message', { title: 'Database not connected', text: configError });
 });
 
 // ---- Routes (pages) ----
 app.use('/', require('./routes/auth'));      // home, login, logout
+app.use('/', require('./routes/setup'));     // one-time database setup
 app.use('/', require('./routes/students'));  // dashboard, register, search, update, delete
 
 // ---- 404 page for unknown URLs ----

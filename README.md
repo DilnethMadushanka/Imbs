@@ -141,7 +141,7 @@ To swap a picture, save a new file with the same name. The course pictures are m
 
 The project is ready for Vercel: `api/index.js` runs the Express app as a serverless function and `vercel.json` sends every page to it. Logins are kept in a signed cookie (`cookie-session`), which works on Vercel.
 
-1. Do Setup Steps 2, 3 and 5 first, so Firestore has the admin, courses and students (`npm run seed` on your PC).
+1. Do Setup Steps 2 and 3 first (create Firestore and download the key).
 2. Go to https://vercel.com, sign in with GitHub, click **Add New → Project** and **Import** the `imbs` repository.
 3. Framework Preset: **Other**. Leave the build settings empty.
 4. Open **Environment Variables** and add two:
@@ -152,6 +152,8 @@ The project is ready for Vercel: `api/index.js` runs the Express app as a server
    | `SESSION_SECRET` | Any long random text, for example `hc-2026-k8w2q9x7m4p1z6` |
 
 5. Click **Deploy**. After about a minute Vercel gives you a link like `https://imbs.vercel.app`.
+
+6. Open `https://<your-site>.vercel.app/setup` and tap **Set up the database**. This adds the admin, courses and students (same as `npm run seed`). It only works once, on an empty database.
 
 Every push to the `main` branch on GitHub deploys the site again automatically.
 

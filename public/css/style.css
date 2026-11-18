@@ -309,6 +309,27 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--err); back
 .table td:nth-child(4) { min-width: 140px; }
 .danger-link { color: var(--err); }
 
+/* Phones: each table row becomes a card, the column name shown beside each value */
+@media (max-width: 760px) {
+  .table-wrap { border: 0; background: transparent; overflow: visible; }
+  .table-cards thead { display: none; }
+  .table-cards, .table-cards tbody, .table-cards tr, .table-cards td { display: block; width: 100%; }
+  .table-cards tr {
+    background: var(--white) !important; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 8px 16px; margin-bottom: 12px;
+  }
+  .table-cards td { display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); min-width: 0 !important; word-break: break-word; }
+  .table-cards td:first-child { border-top: 0; font-weight: 700; color: var(--navy); font-size: 1rem; }
+  .table-cards td::before { content: attr(data-label); font-weight: 700; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; padding-top: 2px; }
+  .table-cards td.row-actions { display: flex; gap: 10px; padding-top: 12px; }
+  .table-cards td.row-actions::before { content: none; }
+  .table-cards .row-actions a {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+    border: 1.5px solid var(--navy); border-radius: var(--radius); text-decoration: none; color: var(--navy);
+  }
+  .table-cards .row-actions a.danger-link { border-color: var(--err); color: var(--err); }
+}
+
 /* ---------- 10. Alerts ---------- */
 .alert { padding: 14px 18px; border-radius: var(--radius); border-left: 4px solid; margin: 0 0 24px; font-weight: 600; max-width: 760px; }
 .alert ul { margin: 0; padding-left: 18px; }
@@ -358,8 +379,24 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--err); back
   .footer-inner { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .dash-grid, .field-row { grid-template-columns: 1fr; }
-  .dash-card { min-height: 170px; }
+  h1 { font-size: 2rem; }
+  .page { padding: 28px 0 56px; }
+  .page-head { margin-bottom: 20px; }
+  .section { padding: 64px 0; }
+  .field-row { grid-template-columns: 1fr; }
+  /* Dashboard: 2 x 2 grid of compact cards */
+  .dash-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .dash-card { min-height: 150px; padding: 18px; }
+  .dash-card h2 { font-size: 1.2rem; }
+  .dash-card p { font-size: .82rem; line-height: 1.45; }
+  .dash-icon { width: 40px; height: 40px; font-size: 1.25rem; }
+  .stat { padding: 16px 20px; }
+  .stat-number { font-size: 2.2rem; }
+  /* Forms: full-width radio buttons and buttons */
+  .radio-row .radio { flex: 1; justify-content: center; }
+  .panel { padding: 20px 16px; }
+  .alert { font-size: .92rem; }
+  .guidelines li { font-size: .92rem; }
   .page-head { align-items: flex-start; }
   .stat { width: 100%; }
   .student-form .btn, .search-bar .btn { width: 100%; }
@@ -367,4 +404,11 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--err); back
   .facts li { flex-direction: column; gap: 0; }
   .facts span { text-align: left; }
   .login-card { padding: 32px 22px; }
+}
+
+/* Very small phones (320-360px) */
+@media (max-width: 360px) {
+  .brand span { font-size: 1.1rem; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .table-cards td { grid-template-columns: 1fr; gap: 2px; }
 }
