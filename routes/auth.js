@@ -43,11 +43,8 @@ router.post('/login', async (req, res, next) => {
     // bcrypt.compare() checks the typed password against the stored hash
     // (same idea as password_verify() in PHP)
     if (doc.exists && await bcrypt.compare(password, doc.data().password)) {
-      req.session.regenerate((err) => {          // new session id = safer login
-        if (err) return next(err);
-        req.session.admin = username;             // remember who logged in
-        res.redirect('/dashboard');
-      });
+      req.session.admin = username;   // remember who logged in (saved in a signed cookie)
+      res.redirect('/dashboard');
     } else {
       res.render('login', { title: 'Admin Login', error: 'Invalid username or password.', username });
     }
@@ -58,9 +55,8 @@ router.post('/login', async (req, res, next) => {
 
 // ---------- LOGOUT ----------
 router.get('/logout', (req, res) => {
-  req.session.destroy(() => {          // delete the session
-    res.redirect('/login');
-  });
+  req.session = null;              // clears the session cookie
+  res.redirect('/login');
 });
 
 module.exports = router;

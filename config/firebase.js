@@ -9,7 +9,13 @@ const admin = require('firebase-admin');   // official Firebase server SDK
 
 const keyPath = path.join(__dirname, 'serviceAccountKey.json');
 
-if (process.env.FIRESTORE_EMULATOR_HOST) {
+// On Vercel the key file is not uploaded (it is secret), so the whole JSON key
+// is stored in an Environment Variable called FIREBASE_SERVICE_ACCOUNT instead.
+if (admin.apps.length) {
+  // Already connected (Vercel can reuse a warm function) - do nothing.
+} else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+  admin.initializeApp({ credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)) });
+} else if (process.env.FIRESTORE_EMULATOR_HOST) {
   // Optional: local Firestore emulator (used for testing only).
   admin.initializeApp({ projectId: process.env.GCLOUD_PROJECT || 'campus-demo' });
 } else if (fs.existsSync(keyPath)) {
@@ -19,8 +25,9 @@ if (process.env.FIRESTORE_EMULATOR_HOST) {
   // Friendly error if the key has not been added yet.
   console.error('\n[ERROR] config/serviceAccountKey.json not found.');
   console.error('Download it from Firebase Console > Project settings > Service accounts');
-  console.error('> "Generate new private key", and save it as config/serviceAccountKey.json\n');
-  process.exit(1);
+  console.error('> "Generate new private key", and save it as config/serviceAccountKey.json');
+  console.error('(On Vercel: add it as the FIREBASE_SERVICE_ACCOUNT environment variable.)\n');
+  throw new Error('Firebase credentials missing');
 }
 
 // "db" is our Firestore database object, used by all routes.

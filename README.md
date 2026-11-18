@@ -12,6 +12,8 @@ Built with **Node.js + Express**, **Firebase Cloud Firestore**, **HTML5 (EJS tem
 ```
 campus/
 ├── server.js                  Main file: starts the Express web server
+├── api/index.js               Entry point used by Vercel
+├── vercel.json                Vercel settings
 ├── seed.js                    Fills Firestore with the admin, 5 courses and 5 students
 ├── package.json               Project info + list of libraries (npm install reads it)
 ├── config/
@@ -120,7 +122,7 @@ All admin pages go through `middleware/auth.js`; opening them without logging in
   * All fields required, gender must be Male/Female, course must exist
 * **No injection:** Firestore is not SQL, and every value is saved as a plain field, so SQL injection is not possible. Only the expected fields are copied from the form.
 * **Output escaping:** EJS `<%= %>` escapes HTML (same job as `htmlspecialchars()`), so a name like `<script>` is shown as text.
-* **Passwords:** stored only as bcrypt hashes. A new session id is created on login.
+* **Passwords:** stored only as bcrypt hashes. The login session is a signed, http-only cookie that expires after 1 hour.
 
 ## 6. Design
 
@@ -135,11 +137,30 @@ To swap a picture, save a new file with the same name. The course pictures are m
 
 **Course text:** course durations and descriptions on the home page are sample text in `views/index.ejs` – edit them to match your campus.
 
-## 7. Common problems
+## 7. Deploy to Vercel (put the site online)
+
+The project is ready for Vercel: `api/index.js` runs the Express app as a serverless function and `vercel.json` sends every page to it. Logins are kept in a signed cookie (`cookie-session`), which works on Vercel.
+
+1. Do Setup Steps 2, 3 and 5 first, so Firestore has the admin, courses and students (`npm run seed` on your PC).
+2. Go to https://vercel.com, sign in with GitHub, click **Add New → Project** and **Import** the `imbs` repository.
+3. Framework Preset: **Other**. Leave the build settings empty.
+4. Open **Environment Variables** and add two:
+
+   | Name | Value |
+   |---|---|
+   | `FIREBASE_SERVICE_ACCOUNT` | Open `serviceAccountKey.json` in Notepad, select everything, and paste the whole JSON here |
+   | `SESSION_SECRET` | Any long random text, for example `hc-2026-k8w2q9x7m4p1z6` |
+
+5. Click **Deploy**. After about a minute Vercel gives you a link like `https://imbs.vercel.app`.
+
+Every push to the `main` branch on GitHub deploys the site again automatically.
+
+## 8. Common problems
 
 | Message | Fix |
 |---|---|
 | `config/serviceAccountKey.json not found` | Do Step 3 and check the file name and folder. |
+| Vercel shows "Something went wrong" or a 500 error | Check that `FIREBASE_SERVICE_ACCOUNT` holds the full JSON (starting with `{` and ending with `}`), then Redeploy. |
 | `5 NOT_FOUND` when seeding | The Firestore database was not created yet – do Step 2.3. |
 | `EADDRINUSE: port 3000` | Another program uses port 3000. Close it, or change `PORT` in `config/site.js`. |
 | `'npm' is not recognized` | Node.js is not installed, or restart Command Prompt after installing. |

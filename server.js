@@ -5,7 +5,7 @@
 // =============================================================
 const path = require('path');
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');   // session stored in a signed cookie (works on Vercel)
 const site = require('./config/site');
 
 const app = express();
@@ -21,17 +21,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ---- Sessions: remember the admin after they log in ----
+// cookie-session keeps the login inside a signed cookie, so it keeps working
+// on Vercel where every request may run on a different server.
+app.set('trust proxy', 1);   // Vercel sits in front of the app (needed for secure cookies)
 app.use(session({
-  secret: 'change-this-secret-key',   // used to sign the session cookie
-  resave: false,
-  saveUninitialized: false,
-  cookie: { httpOnly: true, maxAge: 1000 * 60 * 60 } // 1 hour
+  name: 'campus_session',
+  keys: [process.env.SESSION_SECRET || 'change-this-secret-key'], // signs the cookie so it cannot be faked
+  maxAge: 1000 * 60 * 60,           // 1 hour
+  httpOnly: true,
+  sameSite: 'lax',
+  secure: process.env.NODE_ENV === 'production'
 }));
 
 // ---- Values every page can use (campus name, login status, current page) ----
 app.use((req, res, next) => {
   res.locals.site = site;
-  res.locals.admin = req.session.admin || null;
+  res.locals.admin = (req.session && req.session.admin) || null;
   res.locals.currentPath = req.path;
   next();
 });
@@ -52,6 +57,12 @@ app.use((err, req, res, next) => {
 });
 
 // ---- Start the server ----
-app.listen(site.PORT, () => {
-  console.log(`${site.CAMPUS_NAME} website running at http://localhost:${site.PORT}`);
-});
+// On your PC (npm start) we listen on port 3000.
+// On Vercel the app is exported instead, and Vercel runs it (see api/index.js).
+if (require.main === module) {
+  app.listen(site.PORT, () => {
+    console.log(`${site.CAMPUS_NAME} website running at http://localhost:${site.PORT}`);
+  });
+}
+
+module.exports = app;
