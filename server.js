@@ -41,6 +41,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// ---- If Firebase is not set up, show the reason instead of crashing ----
+const { configError } = require('./config/firebase');
+app.use((req, res, next) => {
+  if (!configError) return next();
+  res.status(500).render('message', { title: 'Database not connected', text: configError });
+});
+
 // ---- Routes (pages) ----
 app.use('/', require('./routes/auth'));      // home, login, logout
 app.use('/', require('./routes/students'));  // dashboard, register, search, update, delete
@@ -53,7 +60,11 @@ app.use((req, res) => {
 // ---- Error handler (e.g. database not reachable) ----
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).render('message', { title: 'Something went wrong', text: 'A server or database error occurred. Please try again.' });
+  // Common Firestore problems, explained in plain words
+  let text = 'A server or database error occurred. Please try again.';
+  if (err.code === 5) text = 'The Firestore database was not found. In the Firebase console open Build > Firestore Database and click Create database, then run npm run seed.';
+  if (err.code === 7 || err.code === 16) text = 'Firebase refused the key. Generate a new private key and update FIREBASE_SERVICE_ACCOUNT (or config/serviceAccountKey.json).';
+  res.status(500).render('message', { title: 'Something went wrong', text });
 });
 
 // ---- Start the server ----

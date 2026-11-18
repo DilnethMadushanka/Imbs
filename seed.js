@@ -8,9 +8,10 @@
 // Running it again simply overwrites the same documents.
 // =============================================================
 const bcrypt = require('bcryptjs');
-const { db, admins, courses, students } = require('./config/firebase');
+const { db, configError, admins, courses, students } = require('./config/firebase');
 
 async function seed() {
+  if (configError) throw new Error(configError);
   // ---- Admin (password is hashed - never store plain passwords) ----
   const hash = await bcrypt.hash('admin123', 10);
   await admins.doc('admin').set({ username: 'admin', password: hash });
