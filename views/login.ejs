@@ -1,0 +1,31 @@
+<%# views/login.ejs  -  ADMIN LOGIN FORM %>
+<%- include('partials/header') %>
+<section class="page login-page">
+  <%# Corridor photo behind the login card %>
+  <img class="login-bg" src="/images/corridor.webp" alt="" width="1200" height="675">
+  <div class="wrap">
+    <div class="login-card" data-enter>
+      <h1>Admin login</h1>
+      <p class="muted">Sign in to manage student records.</p>
+
+      <%# Error message from the server (wrong username or password) %>
+      <% if (error) { %><div class="alert alert-error" role="alert"><%= error %></div><% } %>
+
+      <form method="POST" action="/login" class="form" novalidate data-validate>
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" value="<%= username %>" required autocomplete="username">
+          <small class="field-error"></small>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password">
+          <small class="field-error"></small>
+        </div>
+        <button type="submit" class="btn btn-gold btn-block">Log in</button>
+      </form>
+      <a class="back-link" href="/">Back to the home page</a>
+    </div>
+  </div>
+</section>
+<%- include('partials/footer') %>

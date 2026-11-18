@@ -1,0 +1,35 @@
+<%# views/register.ejs  -  REGISTER A NEW STUDENT (form + guidelines) %>
+<%- include('partials/header') %>
+<section class="page">
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow"><a href="/dashboard">Dashboard</a></p>
+        <h1>Register a student</h1>
+      </div>
+    </div>
+
+    <%- include('partials/alerts') %>
+
+    <div class="form-layout">
+      <div class="panel">
+        <%- include('partials/student-form', { action: '/register', lockNic: false, buttonText: 'Register student' }) %>
+      </div>
+
+      <!-- Registration guidelines shown beside the form -->
+      <aside class="panel guidelines">
+        <h2>Registration guidelines</h2>
+        <ul>
+          <li>Fill in every field. The form will not save with a blank field.</li>
+          <li>Enter the name as it appears on the NIC.</li>
+          <li>NIC: old format is 9 digits and V or X (991234567V); new format is 12 digits (200012345678).</li>
+          <li>Each NIC can be registered only once.</li>
+          <li>Contact number: 10 digits starting with 0 (0771234567).</li>
+          <li>Use an email address the student checks often.</li>
+          <li>Choose the course the student has paid for.</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,32 @@
+<%# views/update.ejs  -  UPDATE A STUDENT: 1) enter NIC  2) edit pre-filled form %>
+<%- include('partials/header') %>
+<section class="page">
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow"><a href="/dashboard">Dashboard</a></p>
+        <h1>Update a student</h1>
+      </div>
+    </div>
+
+    <%# Step 1: find the student by NIC %>
+    <form method="GET" action="/update" class="search-bar" novalidate data-validate>
+      <label for="find-nic" class="sr-only">NIC number</label>
+      <input type="text" id="find-nic" name="nic" value="<%= nic %>" required maxlength="12"
+             pattern="([0-9]{9}[VvXx]|[0-9]{12})" data-msg="Enter 9 digits followed by V or X, or 12 digits."
+             placeholder="Enter the student's NIC">
+      <button type="submit" class="btn btn-gold">Load student</button>
+      <small class="field-error"></small>
+    </form>
+
+    <%- include('partials/alerts') %>
+
+    <%# Step 2: the form, filled with the saved details (NIC cannot be changed) %>
+    <% if (student) { %>
+      <div class="panel form-single">
+        <%- include('partials/student-form', { form: student, action: '/update', lockNic: true, buttonText: 'Save changes' }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+<%- include('partials/footer') %>

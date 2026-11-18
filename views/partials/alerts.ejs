@@ -1,0 +1,11 @@
+<%# views/partials/alerts.ejs - shows the error list and/or the success message %>
+<% if (typeof errors !== 'undefined' && errors.length) { %>
+  <div class="alert alert-error" role="alert">
+    <% if (errors.length === 1) { %><%= errors[0] %><% } else { %>
+      <ul><% errors.forEach(function (e) { %><li><%= e %></li><% }); %></ul>
+    <% } %>
+  </div>
+<% } %>
+<% if (typeof success !== 'undefined' && success) { %>
+  <div class="alert alert-success" role="status"><%= success %></div>
+<% } %>

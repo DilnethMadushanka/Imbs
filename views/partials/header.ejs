@@ -1,0 +1,61 @@
+<%#
+  views/partials/header.ejs
+  Shared top part of every page: <head>, fonts, CSS and the sticky navbar.
+  Included at the top of each page with: include('partials/header')
+  NOTE: the "equals" output tag in EJS escapes HTML automatically (like
+  htmlspecialchars() in PHP), so data typed by users can never inject HTML or scripts.
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= site.CAMPUS_NAME %></title>
+  <meta name="description" content="<%= site.CAMPUS_NAME %> - diplomas, HND and certificate courses in ICT, business, English and design.">
+  <meta name="theme-color" content="#14223f">
+  <link rel="icon" href="/images/logo.svg" type="image/svg+xml">
+  <!-- Google Fonts: Fraunces for headings, Manrope for body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="<%= admin ? 'is-admin' : 'is-public' %>">
+  <!-- Skip link: lets keyboard users jump straight to the content -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== Sticky navigation bar ===== -->
+  <header class="navbar">
+    <div class="wrap nav-inner">
+      <a class="brand" href="<%= admin ? '/dashboard' : '/' %>">
+        <img src="/images/logo.svg" alt="" width="36" height="36">
+        <span><%= site.CAMPUS_NAME %></span>
+      </a>
+
+      <!-- Menu button: only visible on small screens (see style.css) -->
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        <span class="sr-only">Menu</span>
+      </button>
+
+      <nav id="nav-links" class="nav-links" aria-label="Main">
+        <% if (admin) { %>
+          <%# Links for a logged-in admin %>
+          <a href="/dashboard" class="<%= currentPath === '/dashboard' ? 'active' : '' %>">Dashboard</a>
+          <a href="/register"  class="<%= currentPath === '/register'  ? 'active' : '' %>">Register</a>
+          <a href="/search"    class="<%= currentPath === '/search'    ? 'active' : '' %>">Search</a>
+          <a href="/update"    class="<%= currentPath === '/update'    ? 'active' : '' %>">Update</a>
+          <a href="/delete"    class="<%= currentPath === '/delete'    ? 'active' : '' %>">Delete</a>
+          <a href="/logout" class="btn btn-small btn-outline">Log out</a>
+        <% } else { %>
+          <%# Links for public visitors %>
+          <a href="/#about">About</a>
+          <a href="/#courses">Courses</a>
+          <a href="/#contact">Contact</a>
+          <a href="/login" class="btn btn-small btn-gold">Admin login</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">

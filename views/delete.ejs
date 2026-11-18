@@ -1,0 +1,46 @@
+<%# views/delete.ejs  -  DELETE A STUDENT: 1) enter NIC  2) see details  3) confirm %>
+<%- include('partials/header') %>
+<section class="page">
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow"><a href="/dashboard">Dashboard</a></p>
+        <h1>Delete a student</h1>
+      </div>
+    </div>
+
+    <form method="GET" action="/delete" class="search-bar" novalidate data-validate>
+      <label for="find-nic" class="sr-only">NIC number</label>
+      <input type="text" id="find-nic" name="nic" value="<%= nic %>" required maxlength="12"
+             pattern="([0-9]{9}[VvXx]|[0-9]{12})" data-msg="Enter 9 digits followed by V or X, or 12 digits."
+             placeholder="Enter the student's NIC">
+      <button type="submit" class="btn btn-gold">Find student</button>
+      <small class="field-error"></small>
+    </form>
+
+    <%- include('partials/alerts') %>
+
+    <% if (student) { %>
+      <div class="panel form-single">
+        <h2>Student details</h2>
+        <dl class="details">
+          <div><dt>NIC</dt><dd class="mono"><%= student.nic %></dd></div>
+          <div><dt>Name</dt><dd><%= student.name %></dd></div>
+          <div><dt>Gender</dt><dd><%= student.gender %></dd></div>
+          <div><dt>Address</dt><dd><%= student.address %></dd></div>
+          <div><dt>Contact</dt><dd class="mono"><%= student.contact %></dd></div>
+          <div><dt>Email</dt><dd><%= student.email %></dd></div>
+          <div><dt>Course</dt><dd><%= student.course_name %></dd></div>
+          <div><dt>Registered</dt><dd><%= student.reg_date ? new Date(student.reg_date).toLocaleDateString('en-GB') : '' %></dd></div>
+        </dl>
+
+        <%# data-confirm makes main.js ask "Are you sure?" before sending %>
+        <form method="POST" action="/delete" data-confirm="Are you sure you want to delete <%= student.name %>?">
+          <input type="hidden" name="nic" value="<%= student.nic %>">
+          <button type="submit" class="btn btn-danger">Delete student</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+</section>
+<%- include('partials/footer') %>

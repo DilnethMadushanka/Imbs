@@ -1,0 +1,128 @@
+<%#
+  views/index.ejs  -  PUBLIC HOME PAGE
+  Sections: hero, about, courses (loaded from Firestore), contact.
+%>
+<%- include('partials/header') %>
+
+<%
+  // Short descriptions shown under each course (edit to match your campus).
+  // Courses come from the database; a course not listed here gets a general line.
+  // Picture for each course (files in public/images)
+  const pics = {
+    'Diploma in ICT': 'course-ict.webp',
+    'HND in Computing': 'course-hnd.webp',
+    'Diploma in English': 'course-english.webp',
+    'Diploma in Business Management': 'course-business.webp',
+    'Certificate in Graphic Design': 'course-design.webp'
+  };
+  const info = {
+    'Diploma in ICT': ['12 months', 'Programming, networking, databases and web development from first principles.'],
+    'HND in Computing': ['24 months', 'Software engineering, systems analysis and a final-year project with a real client.'],
+    'Diploma in English': ['6 months', 'Speaking, writing and presentation skills for study and the workplace.'],
+    'Diploma in Business Management': ['12 months', 'Accounting, marketing, human resources and how a small business is run.'],
+    'Certificate in Graphic Design': ['6 months', 'Layout, typography and image editing, finished with a portfolio of your own work.']
+  };
+%>
+
+<!-- ===== HERO: full-width campus photo with the headline on top.
+     Fills the first screen and enters once when the page loads ===== -->
+<section class="hero" data-enter>
+  <%# The photo sits behind the text. srcset lets phones load the smaller file %>
+  <img class="hero-bg" src="/images/hero.webp"
+       srcset="/images/hero-900.webp 900w, /images/hero.webp 1672w" sizes="100vw"
+       alt="The <%= site.CAMPUS_NAME %> building at sunset with students walking to class"
+       width="1672" height="941" fetchpriority="high">
+  <div class="hero-shade" aria-hidden="true"></div>
+
+  <div class="wrap hero-content">
+    <p class="eyebrow"><%= site.CAMPUS_AREA %></p>
+    <h1>Diplomas and HNDs in computing, business and English.</h1>
+    <p class="lead">
+      <%= site.CAMPUS_NAME %> runs <%= courses.length || 5 %> full and part-time programmes,
+      taught in small classes by lecturers who work in the field.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="#courses">See the courses</a>
+      <a class="btn btn-outline-light" href="/login">Admin login</a>
+    </div>
+  </div>
+
+  <%# Three quick facts along the bottom of the hero %>
+  <div class="hero-strip">
+    <div class="wrap hero-strip-inner">
+      <p><strong><%= courses.length || 5 %></strong> programmes</p>
+      <p><strong>2</strong> intakes a year</p>
+      <p><strong>2</strong> computer labs</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT: the campus name set large (type moment) ===== -->
+<section class="section about" id="about">
+  <div class="wrap">
+    <h2 class="sr-only">About the campus</h2>
+    <p class="type-moment" aria-hidden="true"><%= site.CAMPUS_NAME %></p>
+    <div class="about-grid">
+      <div class="photo">
+        <img src="/images/library.webp" alt="Students studying at long tables in the campus library" width="1000" height="563" loading="lazy">
+      </div>
+      <div class="about-text">
+        <h3>A campus built around the classroom</h3>
+        <p>
+          We started with one lab and one diploma. Today students come to us for computing,
+          business, English and design, and most of them study while they work.
+        </p>
+        <ul class="facts">
+          <li><strong>Weekday and weekend</strong><span>batches for every programme</span></li>
+          <li><strong>Two computer labs</strong><span>open to students until 5 pm</span></li>
+          <li><strong>One-to-one</strong><span>guidance before you choose a course</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COURSES: loaded from the "course" collection ===== -->
+<section class="section courses" id="courses">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Courses offered</h2>
+      <p>Every course ends with a campus certificate. Intakes run in January and July.</p>
+    </div>
+    <div class="course-grid">
+      <% courses.forEach(function (c, i) { const d = info[c.course_name] || ['Ask us', 'Contact the campus for the full syllabus.']; %>
+        <article class="course-card">
+          <% if (pics[c.course_name]) { %>
+            <div class="course-photo photo">
+              <img src="/images/<%= pics[c.course_name] %>" alt="<%= c.course_name %> class work" width="1000" height="563" loading="lazy">
+            </div>
+          <% } %>
+          <span class="course-no"><%= String(i + 1).padStart(2, '0') %></span>
+          <h3><%= c.course_name %></h3>
+          <p><%= d[1] %></p>
+          <span class="course-meta"><%= d[0] %></span>
+        </article>
+      <% }); %>
+      <% if (!courses.length) { %>
+        <p class="empty">Courses will appear here once the database is set up (run <code>npm run seed</code>).</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="section contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <h2>Visit the campus</h2>
+      <p class="lead">Come in to talk about a course, see the labs or pick up an application form.</p>
+    </div>
+    <dl class="contact-list">
+      <div><dt>Address</dt><dd><%= site.CAMPUS_AREA %></dd></div>
+      <div><dt>Email</dt><dd><a href="mailto:<%= site.CAMPUS_EMAIL %>"><%= site.CAMPUS_EMAIL %></a></dd></div>
+      <div><dt>Open</dt><dd><%= site.CAMPUS_HOURS %></dd></div>
+    </dl>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,25 @@
+<%#
+  views/partials/footer.ejs
+  Shared bottom part of every page: footer + JavaScript file.
+%>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="footer-name"><%= site.CAMPUS_NAME %></p>
+        <p><%= site.CAMPUS_AREA %></p>
+      </div>
+      <div>
+        <p><a href="mailto:<%= site.CAMPUS_EMAIL %>"><%= site.CAMPUS_EMAIL %></a></p>
+        <p><%= site.CAMPUS_HOURS %></p>
+      </div>
+      <p class="footer-copy">&copy; <%= new Date().getFullYear() %> <%= site.CAMPUS_NAME %>. CIT1074 Web Application Development Project.</p>
+    </div>
+  </footer>
+
+  <!-- Client-side validation, menu toggle and delete confirmation -->
+  <script src="/js/main.js"></script>
+</body>
+</html>

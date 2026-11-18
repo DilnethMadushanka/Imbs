@@ -1,0 +1,3 @@
+node_modules/
+# Never share or upload your real Firebase key
+config/serviceAccountKey.json

@@ -1,0 +1,58 @@
+<%# views/search.ejs  -  SEARCH STUDENTS by NIC or part of a name %>
+<%- include('partials/header') %>
+<section class="page">
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow"><a href="/dashboard">Dashboard</a></p>
+        <h1>Search students</h1>
+      </div>
+    </div>
+
+    <%# GET form: the search word goes in the URL, e.g. /search?q=kasun %>
+    <form method="GET" action="/search" class="search-bar">
+      <label for="q" class="sr-only">NIC or name</label>
+      <input type="search" id="q" name="q" value="<%= q %>" placeholder="Enter a NIC or part of a name (leave empty to show all)">
+      <button type="submit" class="btn btn-gold">Search</button>
+    </form>
+
+    <p class="result-count">
+      <%= results.length %> <%= results.length === 1 ? 'student' : 'students' %>
+      <%= q ? 'found for "' + q + '"' : 'in total' %>
+    </p>
+
+    <% if (results.length) { %>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>NIC</th><th>Name</th><th>Gender</th><th>Address</th>
+              <th>Contact</th><th>Email</th><th>Course</th><th>Registered</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results.forEach(function (s) { %>
+              <tr>
+                <td class="mono"><%= s.nic %></td>
+                <td><%= s.name %></td>
+                <td><%= s.gender %></td>
+                <td><%= s.address %></td>
+                <td class="mono"><%= s.contact %></td>
+                <td><%= s.email %></td>
+                <td><%= s.course_name %></td>
+                <td><%= s.reg_date ? new Date(s.reg_date).toLocaleDateString('en-GB') : '' %></td>
+                <td class="row-actions">
+                  <a href="/update?nic=<%= encodeURIComponent(s.nic) %>">Edit</a>
+                  <a href="/delete?nic=<%= encodeURIComponent(s.nic) %>" class="danger-link">Delete</a>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="alert alert-error">No students match your search.</div>
+    <% } %>
+  </div>
+</section>
+<%- include('partials/footer') %>

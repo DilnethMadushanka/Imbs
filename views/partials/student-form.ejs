@@ -1,0 +1,73 @@
+<%#
+  views/partials/student-form.ejs
+  The student form, shared by Register and Update so the code is written once.
+  Values passed in:  form (field values), courses (drop-down list),
+                     action (where to send), lockNic (true on Update), buttonText
+  HTML5 attributes (required, pattern, type="email") give the first check in the
+  browser; public/js/main.js shows friendly messages; the server checks again.
+%>
+<form method="POST" action="<%= action %>" class="form student-form" novalidate data-validate>
+  <div class="field">
+    <label for="name">Full name</label>
+    <input type="text" id="name" name="name" value="<%= form.name || '' %>"
+           required minlength="3" maxlength="100" pattern="[A-Za-z .]{3,100}"
+           data-msg="Use letters, spaces and dots only (at least 3 characters)." placeholder="e.g. Kasun Perera">
+    <small class="field-error"></small>
+  </div>
+
+  <div class="field">
+    <label for="nic">NIC number</label>
+    <%# On Update the NIC is the primary key, so it is read-only %>
+    <input type="text" id="nic" name="nic" value="<%= form.nic || '' %>"
+           required maxlength="12" pattern="([0-9]{9}[VvXx]|[0-9]{12})"
+           data-msg="Enter 9 digits followed by V or X, or 12 digits."
+           placeholder="991234567V or 200012345678" <%= lockNic ? 'readonly' : '' %>>
+    <small class="field-error"></small>
+  </div>
+
+  <fieldset class="field">
+    <legend>Gender</legend>
+    <div class="radio-row">
+      <label class="radio"><input type="radio" name="gender" value="Male" required <%= form.gender === 'Male' ? 'checked' : '' %>> Male</label>
+      <label class="radio"><input type="radio" name="gender" value="Female" <%= form.gender === 'Female' ? 'checked' : '' %>> Female</label>
+    </div>
+    <small class="field-error"></small>
+  </fieldset>
+
+  <div class="field">
+    <label for="address">Address</label>
+    <textarea id="address" name="address" rows="3" required maxlength="255"
+              data-msg="Address is required."><%= form.address || '' %></textarea>
+    <small class="field-error"></small>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="contact">Contact number</label>
+      <input type="tel" id="contact" name="contact" value="<%= form.contact || '' %>"
+             required maxlength="10" pattern="0[0-9]{9}" inputmode="numeric"
+             data-msg="Enter 10 digits starting with 0." placeholder="0771234567">
+      <small class="field-error"></small>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="<%= form.email || '' %>"
+             required maxlength="100" data-msg="Enter a valid email address." placeholder="name@example.com">
+      <small class="field-error"></small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="course_id">Course</label>
+    <%# Drop-down filled from the "course" collection in Firestore %>
+    <select id="course_id" name="course_id" required data-msg="Please choose a course.">
+      <option value="">Select a course</option>
+      <% courses.forEach(function (c) { %>
+        <option value="<%= c.course_id %>" <%= String(form.course_id) === String(c.course_id) ? 'selected' : '' %>><%= c.course_name %></option>
+      <% }); %>
+    </select>
+    <small class="field-error"></small>
+  </div>
+
+  <button type="submit" class="btn btn-gold"><%= buttonText %></button>
+</form>
