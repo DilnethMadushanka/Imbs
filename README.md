@@ -66,7 +66,7 @@ npm -v
 
 ### Step 2 – Create the Firebase project and database
 1. Go to https://console.firebase.google.com and sign in with a Google account.
-2. Click **Add project** (or **Create a project**), give it a name such as `horizon-campus`, and finish the steps (Google Analytics is not needed).
+2. Click **Add project** (or **Create a project**), give it a name such as `trivex-campus`, and finish the steps (Google Analytics is not needed).
 3. In the left menu open **Build → Firestore Database** and click **Create database**.
    Choose a location close to you (for example `asia-south1`), and start in **production mode** (our server uses the Admin SDK, which is allowed anyway).
 
