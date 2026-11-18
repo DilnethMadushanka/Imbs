@@ -13,6 +13,17 @@ if (toggle && links) {
   toggle.addEventListener('click', function () {
     const open = links.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false'); // tells screen readers the state
+    document.body.classList.toggle('menu-open', open);              // stop the page scrolling behind the menu
+  });
+
+  // Close the menu when a link inside it is tapped (e.g. "Courses" on the home page),
+  // otherwise the menu would stay on top of the section we jumped to.
+  links.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
+    });
   });
 }
 

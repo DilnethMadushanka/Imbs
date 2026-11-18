@@ -102,7 +102,7 @@ To stop the server press **Ctrl + C** in the Command Prompt window.
 | Page | URL | What it does |
 |---|---|---|
 | Home | `/` | Hero, about the campus, courses (loaded from Firestore), contact, Admin login button |
-| Login | `/login` | Username + password, bcrypt check, session started, error on wrong details |
+| Admin login | `/admin` | Username + password, bcrypt check, session started, error on wrong details |
 | Dashboard | `/dashboard` | 4 cards (Register, Search, Update, Delete) + total number of students |
 | Register | `/register` | Full form with gender radio buttons, address textarea, course drop-down from Firestore, guidelines list beside it, duplicate NIC error, success message |
 | Search | `/search` | Search by NIC or part of a name; empty search shows every student in a styled table |
@@ -110,7 +110,7 @@ To stop the server press **Ctrl + C** in the Command Prompt window.
 | Delete | `/delete` | Enter NIC → student details → JavaScript `confirm("Are you sure…?")` → delete → success message |
 | Logout | `/logout` | Destroys the session and returns to login |
 
-All admin pages go through `middleware/auth.js`; opening them without logging in sends you to `/login`.
+All admin pages go through `middleware/auth.js`; opening them without logging in sends you to `/admin`.
 
 ## 5. Validation and security
 

@@ -8,5 +8,5 @@ module.exports = function requireLogin(req, res, next) {
   if (req.session && req.session.admin) {
     return next();               // logged in -> continue to the page
   }
-  return res.redirect('/login'); // not logged in -> go to login
+  return res.redirect('/admin'); // not logged in -> go to the admin login page
 };

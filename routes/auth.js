@@ -1,6 +1,6 @@
 // =============================================================
 // routes/auth.js
-// Public pages: Home (/), Login (/login) and Logout (/logout).
+// Public pages: Home (/), Admin login (/admin) and Logout (/logout).
 // =============================================================
 const express = require('express');
 const bcrypt = require('bcryptjs');
@@ -29,13 +29,16 @@ router.get('/', async (req, res) => {
 });
 
 // ---------- LOGIN PAGE (show form) ----------
-router.get('/login', (req, res) => {
+// Old address /login still works - it just sends you to /admin
+router.get('/login', (req, res) => res.redirect(301, '/admin'));
+
+router.get('/admin', (req, res) => {
   if (req.session.admin) return res.redirect('/dashboard'); // already logged in
   res.render('login', { title: 'Admin Login', error: null, username: '' });
 });
 
 // ---------- LOGIN (check username + password) ----------
-router.post('/login', async (req, res, next) => {
+router.post('/admin', async (req, res, next) => {
   try {
     const username = String(req.body.username || '').trim();
     const password = String(req.body.password || '');
@@ -67,7 +70,7 @@ router.post('/login', async (req, res, next) => {
 // ---------- LOGOUT ----------
 router.get('/logout', (req, res) => {
   req.session = null;              // clears the session cookie
-  res.redirect('/login');
+  res.redirect('/admin');
 });
 
 module.exports = router;
