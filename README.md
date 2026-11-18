@@ -1,5 +1,9 @@
 # Trivex Campus – Student Management System
 
+> **Two versions in this repository:**
+> * **`php-version/`** – PHP + MySQL for **WAMP server** (matches the CIT1074 brief: PHP, HTML, CSS, WAMP). See `php-version/README.md`.
+> * **Root folder** – Node.js + Express + Firebase version, deployed on Vercel (this README).
+
 CIT1074 – Web Application Development Project
 Built with **Node.js + Express**, **Firebase Cloud Firestore**, **HTML5 (EJS templates)**, **hand-written CSS3** and **vanilla JavaScript**. No CSS framework.
 
