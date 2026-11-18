@@ -7,13 +7,24 @@
 // =============================================================
 
 // ---------- 1. Mobile menu ----------
+// The button's aria-controls says which menu it opens
+// (the top menu on public pages, the sidebar on admin pages)
 const toggle = document.querySelector('.nav-toggle');
-const links = document.querySelector('.nav-links');
+const links = toggle ? document.getElementById(toggle.getAttribute('aria-controls')) : null;
 if (toggle && links) {
   toggle.addEventListener('click', function () {
     const open = links.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false'); // tells screen readers the state
     document.body.classList.toggle('menu-open', open);              // stop the page scrolling behind the menu
+  });
+
+  // Tapping outside the open menu (on the dark backdrop) closes it too
+  document.addEventListener('click', function (event) {
+    if (links.classList.contains('open') && !links.contains(event.target) && !toggle.contains(event.target)) {
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
+    }
   });
 
   // Close the menu when a link inside it is tapped (e.g. "Courses" on the home page),

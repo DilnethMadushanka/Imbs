@@ -4,6 +4,11 @@
 // Shared bottom part of every page: footer + JavaScript file.
 // =============================================================
 ?>
+<?php if (!empty($is_admin)): ?>
+    <!-- Admin pages: a small footer inside the content area -->
+    <footer class="admin-footer">&copy; <?= date('Y') ?> <?= CAMPUS_NAME ?> &middot; Admin panel</footer>
+  </main>
+<?php else: ?>
   </main>
 
   <!-- ===== Footer ===== -->
@@ -20,6 +25,7 @@
       <p class="footer-copy">&copy; <?= date('Y') ?> <?= CAMPUS_NAME ?>. CIT1074 Web Application Development Project.</p>
     </div>
   </footer>
+<?php endif; ?>
 
   <!-- Client-side validation, mobile menu and delete confirmation -->
   <script src="js/main.js"></script>

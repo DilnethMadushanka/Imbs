@@ -64,12 +64,12 @@ include 'includes/header.php';
             <?php foreach ($results as $s): ?>
               <tr>
                 <td data-label="NIC" class="mono"><?= e($s['nic']) ?></td>
-                <td data-label="Name"><?= e($s['name']) ?></td>
+                <td data-label="Name"><span class="name-cell"><span class="avatar avatar-sm"><?= e(initials($s['name'])) ?></span><?= e($s['name']) ?></span></td>
                 <td data-label="Gender"><?= e($s['gender']) ?></td>
                 <td data-label="Address"><?= e($s['address']) ?></td>
                 <td data-label="Contact" class="mono"><?= e($s['contact']) ?></td>
                 <td data-label="Email"><?= e($s['email']) ?></td>
-                <td data-label="Course"><?= e($s['course_name']) ?></td>
+                <td data-label="Course"><span class="chip"><?= e($s['course_name']) ?></span></td>
                 <td data-label="Registered"><?= date('d/m/Y', strtotime($s['reg_date'])) ?></td>
                 <td class="row-actions">
                   <a href="update.php?nic=<?= urlencode($s['nic']) ?>">Edit</a>

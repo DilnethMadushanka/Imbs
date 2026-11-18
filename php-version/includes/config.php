@@ -4,6 +4,9 @@
 // Site settings. CHANGE THE CAMPUS NAME HERE ONLY - every page
 // reads it from these constants.
 // =============================================================
+// Sri Lanka time for dates shown on the site
+date_default_timezone_set('Asia/Colombo');
+
 define('CAMPUS_NAME',  'Trivex Campus');
 define('CAMPUS_AREA',  'High Level Road, Nugegoda');
 define('CAMPUS_EMAIL', 'info@trivexcampus.example');
